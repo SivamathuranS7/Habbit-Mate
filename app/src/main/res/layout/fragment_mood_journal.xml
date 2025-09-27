@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    tools:context=".fragments.MoodJournalFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Hero Section -->
+        <LinearLayout
+            android:id="@+id/heroSection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/hero_background"
+            android:orientation="vertical"
+            android:padding="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textGreeting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Good Morning!"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textCurrentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="9:30 AM"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/titleMood"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/mood_journal_title"
+            android:textColor="@color/text_primary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/heroSection" />
+
+        <TextView
+            android:id="@+id/textMoodToday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/mood_today"
+            android:textColor="@color/text_secondary"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleMood" />
+
+        <!-- Mood Selector with Horizontal Scroll -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/moodScrollContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textMoodToday">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/moodSelector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <Button
+                        android:id="@+id/btnMoodHappy"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="😊"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                    <Button
+                        android:id="@+id/btnMoodSad"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="😢"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                    <Button
+                        android:id="@+id/btnMoodAngry"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="😠"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                    <Button
+                        android:id="@+id/btnMoodCalm"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="😌"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                    <Button
+                        android:id="@+id/btnMoodExcited"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="🤩"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                    <Button
+                        android:id="@+id/btnMoodTired"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="😴"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                    <Button
+                        android:id="@+id/btnMoodStressed"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="😰"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                    <Button
+                        android:id="@+id/btnMoodGrateful"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="🙏"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                    <Button
+                        android:id="@+id/btnMoodConfused"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="😕"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                    <Button
+                        android:id="@+id/btnMoodSurprised"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="😮"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                    <Button
+                        android:id="@+id/btnMoodLoved"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="🥰"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                    <Button
+                        android:id="@+id/btnMoodProud"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/mood_button_background"
+                        android:text="😎"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary" />
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- Add Mood Button -->
+        <Button
+            android:id="@+id/btnAddMood"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_primary_background"
+            android:text="Add Mood"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/moodScrollContainer" />
+
+        <TextView
+            android:id="@+id/textMoodChart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/mood_chart_title"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAddMood" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/moodChart"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/card_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textMoodChart" />
+
+        <TextView
+            android:id="@+id/textMoodHistory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/mood_history"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/moodChart" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewMoods"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textMoodHistory"
+            tools:listitem="@layout/item_mood" />
+
+        <!-- Walking Activity Section -->
+        <TextView
+            android:id="@+id/textWalkingActivity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Walking Activity"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewMoods" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardWalkingActivity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textWalkingActivity">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/textWalkingSteps"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Steps Today: 0"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textWalkingDistance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Distance: 0.0 km"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Calories Chart Section -->
+        <TextView
+            android:id="@+id/textCaloriesChart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Calories Burned Today"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardWalkingActivity" />
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/caloriesChart"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/card_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCaloriesChart" />
+
+        <!-- Activities Section -->
+        <LinearLayout
+            android:id="@+id/activitiesHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/caloriesChart">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Today's Activities"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnAddActivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+ Add"
+                android:textSize="14sp"
+                android:background="@drawable/button_primary_background"
+                android:textColor="@color/white"
+                android:minWidth="80dp"
+                android:minHeight="36dp" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewActivities"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/activitiesHeader"
+            tools:listitem="@layout/item_activity" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

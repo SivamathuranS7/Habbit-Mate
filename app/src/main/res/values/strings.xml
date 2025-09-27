@@ -1,0 +1,97 @@
+<resources>
+    <string name="app_name">HabbitMate</string>
+    
+    <!-- Navigation -->
+    <string name="nav_habits">Habits</string>
+    <string name="nav_mood">Mood</string>
+    <string name="nav_settings">Settings</string>
+    
+    <!-- Habit Tracker -->
+    <string name="habit_tracker_title">Daily Habits</string>
+    <string name="add_habit">Add Habit</string>
+    <string name="habit_drink_water">Drink Water</string>
+    <string name="habit_meditate">Meditate</string>
+    <string name="habit_walk">Walk</string>
+    <string name="habit_exercise">Exercise</string>
+    <string name="habit_read">Read</string>
+    <string name="habit_sleep_early">Sleep Early</string>
+    <string name="habit_completed">Completed</string>
+    <string name="habit_pending">Pending</string>
+    
+    <!-- Hero Section -->
+    <string name="greeting_morning">Good Morning</string>
+    <string name="greeting_afternoon">Good Afternoon</string>
+    <string name="greeting_evening">Good Evening</string>
+    <string name="greeting_night">Good Night</string>
+    <string name="hero_subtitle">Let\'s make today productive!</string>
+    
+    <!-- Calendar -->
+    <string name="calendar_title">Today\'s Progress</string>
+    
+    <!-- Progress -->
+    <string name="progress_title">Overall Progress</string>
+    <string name="progress_percentage">%d%% Complete</string>
+    
+    <!-- Add Habit Dialog -->
+    <string name="dialog_add_habit_title">Add New Habit</string>
+    <string name="habit_name_hint">Enter habit name</string>
+    <string name="habit_description_hint">Enter description (optional)</string>
+    <string name="habit_category">Category</string>
+    <string name="habit_type">Type</string>
+    <string name="habit_target_count">Target Count</string>
+    <string name="habit_target_count_hint">How many?</string>
+    
+    <!-- Categories -->
+    <string name="category_health">Health</string>
+    <string name="category_education">Education</string>
+    <string name="category_fitness">Fitness</string>
+    <string name="category_work">Work</string>
+    <string name="category_personal">Personal</string>
+    <string name="category_social">Social</string>
+    <string name="category_creative">Creative</string>
+    <string name="category_finance">Finance</string>
+    
+    <!-- Types -->
+    <string name="type_single">Single</string>
+    <string name="type_countable">Countable</string>
+    
+    <!-- Actions -->
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="confirm_delete">Are you sure you want to delete this habit?</string>
+    
+    <!-- Mood Journal -->
+    <string name="mood_journal_title">Mood Journal</string>
+    <string name="mood_today">How are you feeling today?</string>
+    <string name="mood_history">Mood History</string>
+    <string name="mood_happy">Happy</string>
+    <string name="mood_sad">Sad</string>
+    <string name="mood_angry">Angry</string>
+    <string name="mood_calm">Calm</string>
+    <string name="mood_excited">Excited</string>
+    <string name="mood_tired">Tired</string>
+    <string name="mood_stressed">Stressed</string>
+    <string name="mood_grateful">Grateful</string>
+    
+    <!-- Hydration Reminder -->
+    <string name="hydration_title">Hydration Reminder</string>
+    <string name="hydration_enabled">Enable Reminders</string>
+    <string name="hydration_interval">Reminder Interval</string>
+    <string name="hydration_30min">30 minutes</string>
+    <string name="hydration_1hour">1 hour</string>
+    <string name="hydration_2hours">2 hours</string>
+    <string name="hydration_3hours">3 hours</string>
+    <string name="hydration_notification_title">Time to Hydrate!</string>
+    <string name="hydration_notification_text">Remember to drink some water 💧</string>
+    
+    <!-- Common -->
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="done">Done</string>
+    
+    <!-- Chart -->
+    <string name="mood_chart_title">Weekly Mood Trend</string>
+    <string name="mood_chart_x_axis">Days</string>
+    <string name="mood_chart_y_axis">Mood Level</string>
+</resources>

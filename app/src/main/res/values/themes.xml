@@ -1,0 +1,48 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.HabbitMate" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/light_blue</item>
+        <item name="colorPrimaryVariant">@color/light_blue_dark</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
+        
+        <!-- Secondary colors -->
+        <item name="colorSecondary">@color/orange</item>
+        <item name="colorSecondaryVariant">@color/orange_dark</item>
+        <item name="colorOnSecondary">@color/text_on_primary</item>
+        
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="colorSurface">@color/card_background</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/light_blue</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="Theme.HabbitMate" parent="Base.Theme.HabbitMate" />
+    
+    <!-- Card style -->
+    <style name="CardStyle">
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:background">@drawable/card_background</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+    
+    <!-- Button style -->
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:backgroundTint">@color/red</item>
+        <item name="android:textColor">@color/text_on_primary</item>
+        <item name="cornerRadius">24dp</item>
+    </style>
+    
+    <!-- Floating Action Button style -->
+    <style name="FABStyle" parent="Widget.Design.FloatingActionButton">
+        <item name="android:backgroundTint">@color/red</item>
+        <item name="tint">@color/text_on_primary</item>
+    </style>
+</resources>
