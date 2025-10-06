@@ -39,6 +39,9 @@ class SettingsFragment : Fragment() {
     private lateinit var switchSoundEffects: Switch
     private lateinit var switchVibration: Switch
     private lateinit var btnLogout: Button
+    private lateinit var textNotificationPreview: TextView
+    private lateinit var btnEditNotificationMessage: Button
+    private lateinit var btnOpenHydrationSettings: Button
     
     private val timeHandler = Handler(Looper.getMainLooper())
     private val timeRunnable = object : Runnable {
@@ -73,8 +76,11 @@ class SettingsFragment : Fragment() {
         switchActivityTracking = view.findViewById(R.id.switchActivityTracking)
         switchWeeklyReports = view.findViewById(R.id.switchWeeklyReports)
         switchSoundEffects = view.findViewById(R.id.switchSoundEffects)
-        switchVibration = view.findViewById(R.id.switchVibration)
-        btnLogout = view.findViewById(R.id.btnLogout)
+    switchVibration = view.findViewById(R.id.switchVibration)
+    textNotificationPreview = view.findViewById(R.id.textNotificationPreview)
+    btnEditNotificationMessage = view.findViewById(R.id.btnEditNotificationMessage)
+    btnOpenHydrationSettings = view.findViewById(R.id.btnOpenHydrationSettings)
+    btnLogout = view.findViewById(R.id.btnLogout)
         
         setupHeroSection()
         setupProfileButton()
@@ -136,6 +142,7 @@ class SettingsFragment : Fragment() {
         // Setup listeners
         switchNotifications.setOnCheckedChangeListener { _, isChecked ->
             preferencesHelper.setNotificationsEnabled(isChecked)
+            updateNotificationPreviewVisibility()
         }
         
         switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
@@ -148,18 +155,22 @@ class SettingsFragment : Fragment() {
         
         switchHabitReminders.setOnCheckedChangeListener { _, isChecked ->
             preferencesHelper.setHabitRemindersEnabled(isChecked)
+            updateNotificationPreviewVisibility()
         }
         
         switchMoodReminders.setOnCheckedChangeListener { _, isChecked ->
             preferencesHelper.setMoodRemindersEnabled(isChecked)
+            updateNotificationPreviewVisibility()
         }
         
         switchActivityTracking.setOnCheckedChangeListener { _, isChecked ->
             preferencesHelper.setActivityTrackingEnabled(isChecked)
+            updateNotificationPreviewVisibility()
         }
         
         switchWeeklyReports.setOnCheckedChangeListener { _, isChecked ->
             preferencesHelper.setWeeklyReportsEnabled(isChecked)
+            updateNotificationPreviewVisibility()
         }
         
         switchSoundEffects.setOnCheckedChangeListener { _, isChecked ->
@@ -169,23 +180,77 @@ class SettingsFragment : Fragment() {
         switchVibration.setOnCheckedChangeListener { _, isChecked ->
             preferencesHelper.setVibrationEnabled(isChecked)
         }
+
+        btnEditNotificationMessage.setOnClickListener {
+            showEditNotificationDialog()
+        }
+
+        btnOpenHydrationSettings.setOnClickListener {
+            // Open a dedicated activity that hosts the HydrationReminderFragment
+            val intent = android.content.Intent(requireContext(), com.example.habbitmate.activities.HydrationActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Load and initialize notification preview
+        loadNotificationPreview()
+        updateNotificationPreviewVisibility()
+    }
+
+    private fun loadNotificationPreview() {
+        val custom = preferencesHelper.getNotificationMessage()
+        val message = custom ?: getString(R.string.hydration_notification_text)
+        textNotificationPreview.text = message
+    }
+
+    private fun updateNotificationPreviewVisibility() {
+        val notificationsEnabled = preferencesHelper.isNotificationsEnabled()
+        val anyReminderEnabled = preferencesHelper.isHabitRemindersEnabled() ||
+                preferencesHelper.isMoodRemindersEnabled() ||
+                preferencesHelper.isActivityTrackingEnabled()
+
+        val shouldShow = notificationsEnabled && anyReminderEnabled
+
+        textNotificationPreview.visibility = if (shouldShow) View.VISIBLE else View.GONE
+        btnEditNotificationMessage.visibility = if (shouldShow) View.VISIBLE else View.GONE
+    }
+
+    private fun showEditNotificationDialog() {
+        val current = preferencesHelper.getNotificationMessage() ?: getString(R.string.hydration_notification_text)
+        val editText = android.widget.EditText(requireContext()).apply {
+            setText(current)
+            setSelection(text.length)
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Edit Notification Message")
+            .setView(editText)
+            .setPositiveButton(getString(R.string.save)) { _, _ ->
+                val newMsg = editText.text.toString().trim()
+                if (newMsg.isNotEmpty()) {
+                    preferencesHelper.setNotificationMessage(newMsg)
+                    textNotificationPreview.text = newMsg
+                }
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
     }
     
     private fun setupLogout() {
         btnLogout.setOnClickListener {
             AlertDialog.Builder(requireContext())
                 .setTitle("Logout")
-                .setMessage("Are you sure you want to logout? This will clear all your data.")
-                .setPositiveButton("Logout") { _, _ ->
-                    // Clear all data
-                    preferencesHelper.clearAllData()
-                    
-                    // Navigate to onboarding
-                    val intent = Intent(requireContext(), OnboardingActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    requireActivity().finish()
-                }
+                .setMessage("Are you sure you want to logout?")
+                    .setPositiveButton("Logout") { _, _ ->
+                        // Note: we intentionally do NOT clear all app data on logout to avoid
+                        // deleting user-created habits, moods, and activities.
+                        // If you need a full factory reset, add a separate clear-data action.
+
+                        // Navigate to onboarding (or login) screen
+                        val intent = Intent(requireContext(), OnboardingActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        requireActivity().finish()
+                    }
                 .setNegativeButton("Cancel", null)
                 .show()
         }

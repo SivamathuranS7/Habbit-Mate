@@ -28,6 +28,12 @@ class MainActivity : AppCompatActivity() {
         
         setupViewPager()
         setupBottomNavigation()
+
+        // Handle intent extra to open a specific page when returning from other activities
+        val page = intent?.getIntExtra(com.example.habbitmate.activities.EXTRA_PAGE, -1) ?: -1
+        if (page in 0..2) {
+            viewPager.post { viewPager.currentItem = page }
+        }
     }
     
     private fun setupViewPager() {

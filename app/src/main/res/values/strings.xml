@@ -83,6 +83,15 @@
     <string name="hydration_3hours">3 hours</string>
     <string name="hydration_notification_title">Time to Hydrate!</string>
     <string name="hydration_notification_text">Remember to drink some water 💧</string>
+
+    <!-- Hydration tips -->
+    <string-array name="hydration_tips">
+        <item>Carry a water bottle with you throughout the day.</item>
+        <item>Start your morning with a glass of water.</item>
+        <item>Drink a glass of water before each meal to help digestion.</item>
+        <item>Set small goals: sip regularly instead of large amounts rarely.</item>
+        <item>Add fruit slices to your water for a refreshing flavor.</item>
+    </string-array>
     
     <!-- Common -->
     <string name="save">Save</string>

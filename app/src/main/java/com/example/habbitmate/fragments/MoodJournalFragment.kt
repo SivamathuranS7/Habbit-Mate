@@ -340,6 +340,9 @@ class MoodJournalFragment : Fragment() {
         activityRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = activityAdapter
+            // Ensure RecyclerView measures correctly inside the ScrollView
+            setHasFixedSize(false)
+            isNestedScrollingEnabled = false
         }
         
         btnAddActivity.setOnClickListener {
@@ -443,6 +446,19 @@ class MoodJournalFragment : Fragment() {
         val activities = preferencesHelper.getActivities()
         activityAdapter.updateActivities(activities)
         updateCaloriesChart(activities)
+
+        // Force a re-layout and scroll to top so newly added activities appear immediately
+        activityRecyclerView.post {
+            try {
+                activityRecyclerView.requestLayout()
+                if (activities.isNotEmpty()) {
+                    (activityRecyclerView.layoutManager as? LinearLayoutManager)
+                        ?.scrollToPositionWithOffset(0, 0)
+                }
+            } catch (e: Exception) {
+                // Ignore layout exceptions — best effort attempt to refresh UI
+            }
+        }
     }
     
     private fun updateCaloriesChart(activities: List<Activity>) {
@@ -464,9 +480,9 @@ class MoodJournalFragment : Fragment() {
             
             // Define colors for different activity types
             val colorMap = mapOf(
-                ActivityType.WALKING to resources.getColor(R.color.light_blue, null),
-                ActivityType.RUNNING to resources.getColor(R.color.red, null),
-                ActivityType.CYCLING to resources.getColor(R.color.orange, null),
+                ActivityType.WALKING to androidx.core.content.ContextCompat.getColor(requireContext(), R.color.light_blue),
+                ActivityType.RUNNING to androidx.core.content.ContextCompat.getColor(requireContext(), R.color.red),
+                ActivityType.CYCLING to androidx.core.content.ContextCompat.getColor(requireContext(), R.color.orange),
                 ActivityType.SWIMMING to android.graphics.Color.CYAN,
                 ActivityType.YOGA to android.graphics.Color.MAGENTA,
                 ActivityType.GYM to android.graphics.Color.DKGRAY,
@@ -529,10 +545,10 @@ class MoodJournalFragment : Fragment() {
         
         // Configure axes
         val xAxis = moodChart.xAxis
-        xAxis.textColor = resources.getColor(R.color.text_secondary, null)
+    xAxis.textColor = androidx.core.content.ContextCompat.getColor(requireContext(), R.color.text_secondary)
         
         val yAxis = moodChart.axisLeft
-        yAxis.textColor = resources.getColor(R.color.text_secondary, null)
+    yAxis.textColor = androidx.core.content.ContextCompat.getColor(requireContext(), R.color.text_secondary)
         yAxis.axisMinimum = 0f
         yAxis.axisMaximum = 6f
         
@@ -555,8 +571,8 @@ class MoodJournalFragment : Fragment() {
         
         if (entries.isNotEmpty()) {
             val dataSet = LineDataSet(entries, "Mood Level")
-            dataSet.color = resources.getColor(R.color.red, null)
-            dataSet.setCircleColor(resources.getColor(R.color.red, null))
+            dataSet.color = androidx.core.content.ContextCompat.getColor(requireContext(), R.color.red)
+            dataSet.setCircleColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.red))
             dataSet.lineWidth = 3f
             dataSet.circleRadius = 5f
             dataSet.setDrawValues(false)

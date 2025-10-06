@@ -249,8 +249,95 @@ class HabitTrackerFragment : Fragment() {
     }
     
     private fun showEditHabitDialog(habit: Habit) {
-        // Similar to add dialog but pre-filled with habit data
-        showAddHabitDialog() // For now, just show add dialog
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_habit, null)
+        
+        val editTextName = dialogView.findViewById<EditText>(R.id.editTextHabitName)
+        val editTextDescription = dialogView.findViewById<EditText>(R.id.editTextHabitDescription)
+        val spinnerCategory = dialogView.findViewById<Spinner>(R.id.spinnerCategory)
+        val spinnerType = dialogView.findViewById<Spinner>(R.id.spinnerType)
+        val textTargetCountLabel = dialogView.findViewById<TextView>(R.id.textTargetCountLabel)
+        val textInputTargetCount = dialogView.findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.textInputTargetCount)
+        val editTextTargetCount = dialogView.findViewById<EditText>(R.id.editTextTargetCount)
+        val buttonCancel = dialogView.findViewById<Button>(R.id.buttonCancel)
+        val buttonSave = dialogView.findViewById<Button>(R.id.buttonSave)
+
+        // Setup category spinner
+        val categories = HabitCategory.values().map { it.displayName }
+        val categoryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerCategory.adapter = categoryAdapter
+
+        // Setup type spinner
+        val types = HabitType.values().map { it.displayName }
+        val typeAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, types)
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerType.adapter = typeAdapter
+
+        // Prefill values
+        editTextName.setText(habit.name)
+        editTextDescription.setText(habit.description ?: "")
+        spinnerCategory.setSelection(HabitCategory.values().indexOf(habit.category))
+        spinnerType.setSelection(HabitType.values().indexOf(habit.type))
+        if (habit.type == HabitType.COUNTABLE) {
+            textTargetCountLabel.visibility = View.VISIBLE
+            textInputTargetCount.visibility = View.VISIBLE
+            editTextTargetCount.setText(habit.targetCount.toString())
+        } else {
+            textTargetCountLabel.visibility = View.GONE
+            textInputTargetCount.visibility = View.GONE
+        }
+
+        // Handle type change
+        spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val isCountable = HabitType.values()[position] == HabitType.COUNTABLE
+                textTargetCountLabel.visibility = if (isCountable) View.VISIBLE else View.GONE
+                textInputTargetCount.visibility = if (isCountable) View.VISIBLE else View.GONE
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        buttonCancel.setOnClickListener { dialog.dismiss() }
+
+        buttonSave.setOnClickListener {
+            val name = editTextName.text.toString().trim()
+            if (name.isEmpty()) {
+                editTextName.error = "Please enter a habit name"
+                return@setOnClickListener
+            }
+
+            val description = editTextDescription.text.toString().trim()
+            val category = HabitCategory.values()[spinnerCategory.selectedItemPosition]
+            val type = HabitType.values()[spinnerType.selectedItemPosition]
+            val targetCount = if (type == HabitType.COUNTABLE) {
+                editTextTargetCount.text.toString().toIntOrNull() ?: 1
+            } else {
+                1
+            }
+
+            // Preserve currentCount and completion state appropriately
+            val updatedHabit = habit.copy(
+                name = name,
+                description = if (description.isEmpty()) null else description,
+                category = category,
+                type = type,
+                targetCount = targetCount,
+                // If new targetCount is smaller than currentCount, cap the currentCount
+                currentCount = habit.currentCount.coerceAtMost(targetCount),
+                isCompleted = habit.currentCount.coerceAtMost(targetCount) >= targetCount
+            )
+
+            preferencesHelper.updateHabit(habit.id, updatedHabit)
+            loadHabits()
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
     
     private fun showDeleteConfirmationDialog(habit: Habit) {

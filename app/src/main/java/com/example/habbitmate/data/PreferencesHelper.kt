@@ -28,6 +28,7 @@ class PreferencesHelper(context: Context) {
         private const val KEY_WEEKLY_REPORTS_ENABLED = "weekly_reports_enabled"
         private const val KEY_SOUND_EFFECTS_ENABLED = "sound_effects_enabled"
         private const val KEY_VIBRATION_ENABLED = "vibration_enabled"
+        private const val KEY_NOTIFICATION_MESSAGE = "notification_message"
     }
 
     // Habit management
@@ -100,20 +101,30 @@ class PreferencesHelper(context: Context) {
         val habitIndex = habits.indexOfFirst { it.id == habitId }
         if (habitIndex != -1) {
             val currentHabit = habits[habitIndex]
+            val targetCount = currentHabit.targetCount.takeIf { it > 0 } ?: 1
             val newCount = if (increment) {
-                currentHabit.currentCount + 1
+                // increment but do not exceed targetCount
+                (currentHabit.currentCount + 1).coerceAtMost(targetCount)
             } else {
                 (currentHabit.currentCount - 1).coerceAtLeast(0)
             }
-            
-            val targetCount = currentHabit.targetCount.takeIf { it > 0 } ?: 1
+
             val isCompleted = newCount >= targetCount
-            
+
             habits[habitIndex] = currentHabit.copy(
                 currentCount = newCount,
                 isCompleted = isCompleted,
-                completedDate = if (isCompleted && !currentHabit.isCompleted) Date() else currentHabit.completedDate
+                completedDate = if (isCompleted && !currentHabit.isCompleted) Date() else if (!isCompleted) null else currentHabit.completedDate
             )
+            saveHabits(habits)
+        }
+    }
+
+    fun updateHabit(habitId: String, updatedHabit: Habit) {
+        val habits = getHabits().toMutableList()
+        val index = habits.indexOfFirst { it.id == habitId }
+        if (index != -1) {
+            habits[index] = updatedHabit
             saveHabits(habits)
         }
     }
@@ -269,6 +280,15 @@ class PreferencesHelper(context: Context) {
     
     fun isVibrationEnabled(): Boolean {
         return prefs.getBoolean(KEY_VIBRATION_ENABLED, true)
+    }
+    
+    // Notification message (customizable by user)
+    fun setNotificationMessage(message: String) {
+        prefs.edit().putString(KEY_NOTIFICATION_MESSAGE, message).apply()
+    }
+
+    fun getNotificationMessage(): String? {
+        return prefs.getString(KEY_NOTIFICATION_MESSAGE, null)
     }
     
     // Clear all data (useful for debugging or fresh start)
