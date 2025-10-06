@@ -11,6 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.util.Log
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,6 +56,7 @@ class MoodJournalFragment : Fragment() {
     // Hero section views
     private lateinit var textGreeting: TextView
     private lateinit var textCurrentTime: TextView
+    private lateinit var textCaloriesChart: TextView
     
     // Walking activity views
     private lateinit var textWalkingSteps: TextView
@@ -81,6 +87,12 @@ class MoodJournalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         preferencesHelper = PreferencesHelper(requireContext())
+        // Register receiver to reload activities when preferences change
+        try {
+            requireContext().registerReceiver(activitiesUpdatedReceiver, IntentFilter(PreferencesHelper.ACTION_ACTIVITIES_UPDATED))
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to register activitiesUpdatedReceiver: ${e.message}")
+        }
         
         // Initialize views
         moodRecyclerView = view.findViewById(R.id.recyclerViewMoods)
@@ -88,6 +100,7 @@ class MoodJournalFragment : Fragment() {
         caloriesChart = view.findViewById(R.id.caloriesChart)
         textGreeting = view.findViewById(R.id.textGreeting)
         textCurrentTime = view.findViewById(R.id.textCurrentTime)
+    textCaloriesChart = view.findViewById(R.id.textCaloriesChart)
         textWalkingSteps = view.findViewById(R.id.textWalkingSteps)
         textWalkingDistance = view.findViewById(R.id.textWalkingDistance)
         btnAddMood = view.findViewById(R.id.btnAddMood)
@@ -110,10 +123,28 @@ class MoodJournalFragment : Fragment() {
         updateTime()
         timeHandler.postDelayed(timeRunnable, 60000)
     }
+
+    private val TAG = "MoodJournalFragment"
+
+    private val activitiesUpdatedReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            try {
+                Log.d(TAG, "Received activities-updated broadcast, reloading activities")
+                loadActivities()
+            } catch (e: Exception) {
+                Log.w(TAG, "Error handling activities-updated: ${e.message}")
+            }
+        }
+    }
     
     override fun onDestroyView() {
         super.onDestroyView()
         timeHandler.removeCallbacks(timeRunnable)
+        try {
+            requireContext().unregisterReceiver(activitiesUpdatedReceiver)
+        } catch (e: Exception) {
+            // ignore if not registered
+        }
     }
     
     private fun setupHeroSection() {
@@ -469,11 +500,14 @@ class MoodJournalFragment : Fragment() {
             today.get(Calendar.DAY_OF_YEAR) == activityDate.get(Calendar.DAY_OF_YEAR) &&
             today.get(Calendar.YEAR) == activityDate.get(Calendar.YEAR)
         }
-        
+        Log.d(TAG, "updateCaloriesChart called. total activities=${activities.size}, todayActivities=${todayActivities.size}")
+
         if (todayActivities.isNotEmpty()) {
             // Group activities by type and sum calories
             val caloriesByType = todayActivities.groupBy { it.type }
                 .mapValues { (_, activities) -> activities.sumOf { it.calories } }
+
+            Log.d(TAG, "caloriesByType=$caloriesByType")
             
             val entries = mutableListOf<PieEntry>()
             val colors = mutableListOf<Int>()
@@ -503,12 +537,31 @@ class MoodJournalFragment : Fragment() {
             
             val pieData = PieData(dataSet)
             pieData.setValueFormatter(PercentFormatter(caloriesChart))
-            
+
+            // Also set center text to include total calories for easier visibility
+            val totalCalories = caloriesByType.values.sum()
+            caloriesChart.setCenterText("Calories\nBurned\n$totalCalories kcal")
+
+            // Assign data and notify chart so it updates reliably
             caloriesChart.data = pieData
+            try {
+                // Notify data and chart about changes
+                pieData.notifyDataChanged()
+                caloriesChart.notifyDataSetChanged()
+            } catch (e: Exception) {
+                Log.w(TAG, "Error notifying chart data change: ${e.message}")
+            }
             caloriesChart.invalidate()
         } else {
             // Clear chart when no activities
             caloriesChart.clear()
+            // Reset center text
+            caloriesChart.setCenterText("Calories\nBurned")
+            try {
+                caloriesChart.notifyDataSetChanged()
+            } catch (e: Exception) {
+                Log.w(TAG, "Error notifying chart clear: ${e.message}")
+            }
             caloriesChart.invalidate()
         }
     }

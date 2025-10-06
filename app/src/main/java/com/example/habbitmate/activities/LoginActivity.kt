@@ -17,7 +17,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         btnLogin = findViewById(R.id.btnLogin)
-        linkSignup = findViewById(R.id.linkSignup)
+    // signup link moved to bottom of the layout
+    linkSignup = findViewById(R.id.linkSignupBottom)
 
         btnLogin.setOnClickListener {
             // For now, go to MainActivity after login (replace with real auth)

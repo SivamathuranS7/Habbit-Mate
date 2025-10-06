@@ -3,42 +3,71 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light">
+    android:background="@color/background_light"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
 
+    <!-- Content block for signup: centered vertically like login -->
     <LinearLayout
+        android:id="@+id/contentBlock"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/background_light"
-        android:padding="24dp"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center">
+        app:layout_constraintVertical_bias="0.5">
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
+            android:id="@+id/welcomeGroupSignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/textSignupTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create Account"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textSignupTagline"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="Join Habbit-Mate to track your habits and progress across devices."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:layout_marginTop="6dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
             app:cardBackgroundColor="@color/card_background"
-            android:padding="20dp">
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textSignupTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Create Account"
-                    android:textColor="@color/text_primary"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:gravity="center" />
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <EditText
                     android:id="@+id/editName"
@@ -46,7 +75,6 @@
                     android:layout_height="wrap_content"
                     android:hint="Full Name"
                     android:inputType="textPersonName"
-                    android:layout_marginTop="16dp"
                     android:background="@drawable/input_background"
                     android:padding="12dp" />
 
@@ -56,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Email"
                     android:inputType="textEmailAddress"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
                     android:background="@drawable/input_background"
                     android:padding="12dp" />
 
@@ -66,7 +94,17 @@
                     android:layout_height="wrap_content"
                     android:hint="Password"
                     android:inputType="textPassword"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/input_background"
+                    android:padding="12dp" />
+
+                <EditText
+                    android:id="@+id/editConfirmPasswordSignup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Confirm Password"
+                    android:inputType="textPassword"
+                    android:layout_marginTop="12dp"
                     android:background="@drawable/input_background"
                     android:padding="12dp" />
 
@@ -80,9 +118,94 @@
                     android:textColor="@color/text_on_primary"
                     android:padding="12dp" />
 
+                <!-- OR divider -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="14dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/divider" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  OR  "
+                        android:textColor="@color/text_primary" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/divider" />
+
+                </LinearLayout>
+
+                <!-- Social login buttons (vertical list) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/btnGoogleSignup"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="Continue with Google"
+                        android:drawableLeft="@drawable/ic_google"
+                        android:background="@drawable/button_outline"
+                        android:textColor="@color/text_primary"
+                        android:padding="8dp"
+                        android:layout_marginTop="6dp" />
+
+                    <Button
+                        android:id="@+id/btnFacebookSignup"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="Continue with Facebook"
+                        android:drawableLeft="@drawable/ic_facebook"
+                        android:background="@drawable/button_outline"
+                        android:textColor="@color/text_primary"
+                        android:padding="8dp"
+                        android:layout_marginTop="8dp" />
+
+                    <Button
+                        android:id="@+id/btnAppleSignup"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="Continue with Apple"
+                        android:drawableLeft="@drawable/ic_apple"
+                        android:background="@drawable/button_outline"
+                        android:textColor="@color/text_primary"
+                        android:padding="8dp"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/linkLoginBottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Already have an account?\nLog in"
+            android:textColor="@color/red"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
     </LinearLayout>
 

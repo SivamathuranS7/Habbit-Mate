@@ -7,7 +7,8 @@ import com.google.gson.reflect.TypeToken
 import java.util.Date
 
 class PreferencesHelper(context: Context) {
-    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val context: Context = context.applicationContext
+    private val prefs: SharedPreferences = this.context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     private val gson = Gson()
 
     companion object {
@@ -29,6 +30,7 @@ class PreferencesHelper(context: Context) {
         private const val KEY_SOUND_EFFECTS_ENABLED = "sound_effects_enabled"
         private const val KEY_VIBRATION_ENABLED = "vibration_enabled"
         private const val KEY_NOTIFICATION_MESSAGE = "notification_message"
+        const val ACTION_ACTIVITIES_UPDATED = "com.example.habbitmate.ACTION_ACTIVITIES_UPDATED"
     }
 
     // Habit management
@@ -155,6 +157,13 @@ class PreferencesHelper(context: Context) {
     fun saveActivities(activities: List<Activity>) {
         val activitiesJson = gson.toJson(activities)
         prefs.edit().putString(KEY_ACTIVITIES, activitiesJson).apply()
+        // Notify listeners that activities changed
+        try {
+            val intent = android.content.Intent(ACTION_ACTIVITIES_UPDATED)
+            this.context.sendBroadcast(intent)
+        } catch (e: Exception) {
+            // ignore broadcast errors
+        }
     }
 
     fun getActivities(): List<Activity> {

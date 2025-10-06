@@ -3,42 +3,76 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light">
+    android:background="@color/background_light"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
 
+    <!-- Hero header with gradient and icon -->
+    <!-- heroHeader removed -->
+
+    <!-- Content block centers the welcome + form + signup vertically -->
     <LinearLayout
+        android:id="@+id/contentBlock"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/background_light"
-        android:padding="24dp"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center">
+        app:layout_constraintVertical_bias="0.5">
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
+            android:id="@+id/welcomeGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="18dp">
+
+            <TextView
+                android:id="@+id/textWelcomeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.01"
+                android:text="Welcome Back"
+                android:textColor="@color/black"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textWelcomeTagline"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:lineSpacingExtra="2dp"
+                android:text="Glad to see you again! Ready to pick up where you left off."
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
             app:cardBackgroundColor="@color/card_background"
-            android:padding="20dp">
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textLoginTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Welcome Back"
-                    android:textColor="@color/text_primary"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:gravity="center" />
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <EditText
                     android:id="@+id/editEmail"
@@ -46,7 +80,6 @@
                     android:layout_height="wrap_content"
                     android:hint="Email"
                     android:inputType="textEmailAddress"
-                    android:layout_marginTop="16dp"
                     android:background="@drawable/input_background"
                     android:padding="12dp" />
 
@@ -56,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Password"
                     android:inputType="textPassword"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
                     android:background="@drawable/input_background"
                     android:padding="12dp" />
 
@@ -70,18 +103,94 @@
                     android:textColor="@color/text_on_primary"
                     android:padding="12dp" />
 
-                <TextView
-                    android:id="@+id/linkSignup"
+                <!-- OR divider -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Don't have an account? Sign up"
-                    android:textColor="@color/light_blue"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="14dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/divider" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  OR  "
+                        android:textColor="@color/text_primary" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/divider" />
+
+                </LinearLayout>
+
+                <!-- Social login buttons (vertical list) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:layout_marginTop="12dp"
-                    android:gravity="center" />
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/btnGoogle"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="Continue with Google"
+                        android:drawableLeft="@drawable/ic_google"
+                        android:background="@drawable/button_outline"
+                        android:textColor="@color/text_primary"
+                        android:padding="8dp"
+                        android:layout_marginTop="6dp" />
+
+                    <Button
+                        android:id="@+id/btnFacebook"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="Continue with Facebook"
+                        android:drawableLeft="@drawable/ic_facebook"
+                        android:background="@drawable/button_outline"
+                        android:textColor="@color/text_primary"
+                        android:padding="8dp"
+                        android:layout_marginTop="8dp" />
+
+                    <Button
+                        android:id="@+id/btnApple"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="Continue with Apple"
+                        android:drawableLeft="@drawable/ic_apple"
+                        android:background="@drawable/button_outline"
+                        android:textColor="@color/text_primary"
+                        android:padding="8dp"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/linkSignupBottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account?\nRegister now"
+            android:textColor="@color/red"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
     </LinearLayout>
 
