@@ -79,7 +79,8 @@ class OnboardingActivity : AppCompatActivity() {
     }
     
     private fun navigateToMain() {
-        val intent = Intent(this, MainActivity::class.java)
+        // After onboarding, navigate to Login screen
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
     }

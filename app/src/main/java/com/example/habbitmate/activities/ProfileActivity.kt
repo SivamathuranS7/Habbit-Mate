@@ -59,9 +59,10 @@ class ProfileActivity : AppCompatActivity() {
         val activities = preferencesHelper.getActivities()
         
         // Set user information (you can customize these)
-        textUserName.text = "Sivamathuran" // Default user name
-        textUserEmail.text = "john.doe@example.com" // Default email
-        textJoinDate.text = "Joined on ${SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date())}"
+    textUserName.text = "Sivamathuran" // Default user name
+    textUserEmail.text = "mathuran@gmail.com" // Default email
+    // Show a fixed joined date per request
+    textJoinDate.text = "Joined on Oct 01, 2025"
         
         // Note: Build Date is static in layout (Build Date: September 2025)
         textTotalHabits.text = habits.size.toString()
