@@ -108,6 +108,15 @@ class HydrationNotificationService : BroadcastReceiver() {
         if (!preferencesHelper.isHydrationEnabled()) {
             return
         }
+        // Check day-of-week selection
+        val calendar = java.util.Calendar.getInstance()
+        val today = calendar.get(java.util.Calendar.DAY_OF_WEEK)
+        if (!preferencesHelper.isHydrationDayEnabled(today)) {
+            // Reschedule next reminder without showing
+            val intervalMinutes = preferencesHelper.getHydrationInterval()
+            scheduleRepeatingNotification(context, intervalMinutes)
+            return
+        }
         
     // Build and post the hydration notification (NotificationChannel set elsewhere)
     val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

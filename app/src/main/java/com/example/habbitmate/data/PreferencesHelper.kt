@@ -21,6 +21,9 @@ class PreferencesHelper(context: Context) {
         private const val KEY_ACTIVITIES = "activities"
         private const val KEY_HYDRATION_ENABLED = "hydration_enabled"
         private const val KEY_HYDRATION_INTERVAL = "hydration_interval"
+    private const val KEY_HYDRATION_DAYS = "hydration_days"
+    private const val KEY_HYDRATION_GOAL_MIN = "hydration_goal_min"
+    private const val KEY_HYDRATION_GOAL_MAX = "hydration_goal_max"
         
         // Settings keys
         private const val KEY_NOTIFICATIONS_ENABLED = "notifications_enabled"
@@ -223,6 +226,55 @@ class PreferencesHelper(context: Context) {
 
     fun getHydrationInterval(): Int {
         return prefs.getInt(KEY_HYDRATION_INTERVAL, 60) // Default 1 hour
+    }
+
+    /**
+     * Hydration days bitmask: bits 0..6 map to Monday..Sunday respectively.
+     * Default: all days enabled (0b1111111 = 127)
+     */
+    fun setHydrationDays(daysMask: Int) {
+        prefs.edit().putInt(KEY_HYDRATION_DAYS, daysMask).apply()
+    }
+
+    fun getHydrationDays(): Int {
+        // Default: Monday..Friday (bits 0..4 set)
+        return prefs.getInt(KEY_HYDRATION_DAYS, 0b00011111)
+    }
+
+    // Daily hydration goal in milliliters
+    fun setHydrationGoalMin(minMl: Int) {
+        prefs.edit().putInt(KEY_HYDRATION_GOAL_MIN, minMl).apply()
+    }
+
+    fun setHydrationGoalMax(maxMl: Int) {
+        prefs.edit().putInt(KEY_HYDRATION_GOAL_MAX, maxMl).apply()
+    }
+
+    fun getHydrationGoalMin(): Int {
+        return prefs.getInt(KEY_HYDRATION_GOAL_MIN, 1500) // default 1500 ml
+    }
+
+    fun getHydrationGoalMax(): Int {
+        return prefs.getInt(KEY_HYDRATION_GOAL_MAX, 2500) // default 2500 ml
+    }
+
+    /**
+     * Helper: check if day (Calendar.DAY_OF_WEEK 1..7, Sunday=1) is enabled
+     */
+    fun isHydrationDayEnabled(calendarDayOfWeek: Int): Boolean {
+        // Map Calendar.SUNDAY(1) -> bit 6; Monday(2) -> bit 0; ... Saturday(7) -> bit 5
+        val bitIndex = when (calendarDayOfWeek) {
+            java.util.Calendar.MONDAY -> 0
+            java.util.Calendar.TUESDAY -> 1
+            java.util.Calendar.WEDNESDAY -> 2
+            java.util.Calendar.THURSDAY -> 3
+            java.util.Calendar.FRIDAY -> 4
+            java.util.Calendar.SATURDAY -> 5
+            java.util.Calendar.SUNDAY -> 6
+            else -> 0
+        }
+        val mask = getHydrationDays()
+        return (mask shr bitIndex) and 1 == 1
     }
     
     // Settings management
