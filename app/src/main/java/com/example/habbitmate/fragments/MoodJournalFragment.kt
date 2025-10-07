@@ -28,6 +28,7 @@ import com.example.habbitmate.data.ActivityType
 import com.example.habbitmate.data.Mood
 import com.example.habbitmate.data.MoodType
 import com.example.habbitmate.data.PreferencesHelper
+// MPAndroidChart imports
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.Entry
@@ -43,6 +44,7 @@ import java.util.*
 class MoodJournalFragment : Fragment() {
     
     private lateinit var moodRecyclerView: RecyclerView
+    // MPAndroidChart chart views
     private lateinit var moodChart: LineChart
     private lateinit var caloriesChart: PieChart
     private lateinit var moodAdapter: MoodAdapter
@@ -94,10 +96,11 @@ class MoodJournalFragment : Fragment() {
             Log.w(TAG, "Failed to register activitiesUpdatedReceiver: ${e.message}")
         }
         
-        // Initialize views
-        moodRecyclerView = view.findViewById(R.id.recyclerViewMoods)
-        moodChart = view.findViewById(R.id.moodChart)
-        caloriesChart = view.findViewById(R.id.caloriesChart)
+    // Initialize views
+    moodRecyclerView = view.findViewById(R.id.recyclerViewMoods)
+    // bind MPAndroidChart views
+    moodChart = view.findViewById(R.id.moodChart)
+    caloriesChart = view.findViewById(R.id.caloriesChart)
         textGreeting = view.findViewById(R.id.textGreeting)
         textCurrentTime = view.findViewById(R.id.textCurrentTime)
     textCaloriesChart = view.findViewById(R.id.textCaloriesChart)
@@ -493,6 +496,7 @@ class MoodJournalFragment : Fragment() {
     }
     
     private fun updateCaloriesChart(activities: List<Activity>) {
+        // MPAndroidChart: prepare PieChart data and update caloriesChart
         val todayActivities = activities.filter { 
             val today = Calendar.getInstance()
             val activityDate = Calendar.getInstance()
@@ -567,7 +571,7 @@ class MoodJournalFragment : Fragment() {
     }
     
     private fun setupCaloriesChart() {
-        // Configure pie chart appearance
+        // MPAndroidChart: configure PieChart appearance
         caloriesChart.description.isEnabled = false
         caloriesChart.setTouchEnabled(true)
         caloriesChart.setBackgroundColor(android.graphics.Color.WHITE)
@@ -588,7 +592,7 @@ class MoodJournalFragment : Fragment() {
     }
     
     private fun setupChart() {
-        // Configure chart appearance
+        // MPAndroidChart: configure LineChart appearance
         moodChart.description.isEnabled = false
         moodChart.setTouchEnabled(true)
         moodChart.isDragEnabled = true
@@ -615,6 +619,7 @@ class MoodJournalFragment : Fragment() {
     }
     
     private fun updateChart(moods: List<Mood>) {
+        // MPAndroidChart: prepare LineChart data and update moodChart
         val entries = mutableListOf<Entry>()
         val last7Days = moods.takeLast(7)
         
@@ -623,6 +628,7 @@ class MoodJournalFragment : Fragment() {
         }
         
         if (entries.isNotEmpty()) {
+            // create LineDataSet and apply styling
             val dataSet = LineDataSet(entries, "Mood Level")
             dataSet.color = androidx.core.content.ContextCompat.getColor(requireContext(), R.color.red)
             dataSet.setCircleColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.red))

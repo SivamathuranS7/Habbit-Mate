@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MoodAdapter : RecyclerView.Adapter<MoodAdapter.MoodViewHolder>() {
-    
+    // Adapter for mood entries shown in the Mood journal RecyclerView
     private var moods = listOf<Mood>()
     private val dateFormat = SimpleDateFormat("MMM dd, h:mm a", Locale.getDefault())
     

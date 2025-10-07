@@ -246,6 +246,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnAddMood" />
 
+        <!-- MPAndroidChart LineChart (moodChart) -->
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/moodChart"
             android:layout_width="0dp"
@@ -349,6 +350,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardWalkingActivity" />
 
+        <!-- MPAndroidChart PieChart (caloriesChart) -->
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/caloriesChart"
             android:layout_width="0dp"

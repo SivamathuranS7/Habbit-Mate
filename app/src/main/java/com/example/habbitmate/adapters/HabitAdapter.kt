@@ -16,7 +16,7 @@ class HabitAdapter(
     private val onEditHabit: (Habit) -> Unit,
     private val onDeleteHabit: (Habit) -> Unit
 ) : RecyclerView.Adapter<HabitAdapter.HabitViewHolder>() {
-    
+    // Adapter for habit list; updates view with habit progress and handles item interactions
     private var habits = listOf<Habit>()
     
     fun updateHabits(newHabits: List<Habit>) {

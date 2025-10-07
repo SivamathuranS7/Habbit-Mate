@@ -1,12 +1,15 @@
 package com.example.habbitmate.data
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.Date
+import java.security.MessageDigest
 
 class PreferencesHelper(context: Context) {
+    // Simple SharedPreferences-backed helper for app data (habits, moods, activities, settings)
     private val context: Context = context.applicationContext
     private val prefs: SharedPreferences = this.context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     private val gson = Gson()
@@ -30,6 +33,10 @@ class PreferencesHelper(context: Context) {
         private const val KEY_SOUND_EFFECTS_ENABLED = "sound_effects_enabled"
         private const val KEY_VIBRATION_ENABLED = "vibration_enabled"
         private const val KEY_NOTIFICATION_MESSAGE = "notification_message"
+        // Simple local credential storage (email + password hash)
+        private const val KEY_USER_EMAIL = "user_email"
+        private const val KEY_USER_PASSWORD_HASH = "user_password_hash"
+        private const val KEY_USER_NAME = "user_name"
         const val ACTION_ACTIVITIES_UPDATED = "com.example.habbitmate.ACTION_ACTIVITIES_UPDATED"
     }
 
@@ -303,6 +310,59 @@ class PreferencesHelper(context: Context) {
     // Clear all data (useful for debugging or fresh start)
     fun clearAllData() {
         prefs.edit().clear().apply()
+    }
+
+    /**
+     * Clear only user-specific data (habits, moods, activities, and stored credentials).
+     * Keeps general app settings (notification toggles, theme preferences, etc.).
+     */
+    fun clearUserData() {
+        prefs.edit()
+            .remove(KEY_HABITS)
+            .remove(KEY_MOODS)
+            .remove(KEY_ACTIVITIES)
+            .remove(KEY_USER_EMAIL)
+            .remove(KEY_USER_PASSWORD_HASH)
+            .remove(KEY_USER_NAME)
+            .apply()
+
+        // Notify listeners that activities list has changed (UI can refresh)
+        try {
+            val intent = Intent(ACTION_ACTIVITIES_UPDATED)
+            this.context.sendBroadcast(intent)
+        } catch (e: Exception) {
+            // ignore
+        }
+    }
+
+    // ----------------
+    // User credentials
+    // ----------------
+    private fun sha256(input: String): String {
+        val md = MessageDigest.getInstance("SHA-256")
+        val bytes = md.digest(input.toByteArray(Charsets.UTF_8))
+        return bytes.joinToString("") { "%02x".format(it) }
+    }
+
+    fun saveUserCredentials(email: String, password: String, name: String? = null) {
+        val hash = sha256(password)
+        prefs.edit().putString(KEY_USER_EMAIL, email).putString(KEY_USER_PASSWORD_HASH, hash).apply()
+        name?.let { prefs.edit().putString(KEY_USER_NAME, it).apply() }
+    }
+
+    fun isUserRegistered(): Boolean {
+        return prefs.contains(KEY_USER_EMAIL) && prefs.contains(KEY_USER_PASSWORD_HASH)
+    }
+
+    fun getUserEmail(): String? = prefs.getString(KEY_USER_EMAIL, null)
+
+    fun getUserName(): String? = prefs.getString(KEY_USER_NAME, null)
+
+    fun verifyUserCredentials(email: String, password: String): Boolean {
+        val savedEmail = getUserEmail() ?: return false
+        if (savedEmail != email) return false
+        val savedHash = prefs.getString(KEY_USER_PASSWORD_HASH, null) ?: return false
+        return savedHash == sha256(password)
     }
 
     private fun getDefaultHabits(): List<Habit> {

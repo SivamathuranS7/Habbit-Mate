@@ -22,7 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
 class HabitTrackerFragment : Fragment() {
-    
+    // Fragment that shows user's habits, progress bar, and calendar; uses HabitAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var fab: FloatingActionButton
     private lateinit var habitAdapter: HabitAdapter

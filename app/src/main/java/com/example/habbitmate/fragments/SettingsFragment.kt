@@ -241,9 +241,10 @@ class SettingsFragment : Fragment() {
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to logout?")
                     .setPositiveButton("Logout") { _, _ ->
-                        // Note: we intentionally do NOT clear all app data on logout to avoid
-                        // deleting user-created habits, moods, and activities.
-                        // If you need a full factory reset, add a separate clear-data action.
+                        // Do NOT clear stored credentials or user-created data on logout so
+                        // the user can sign back in with the same account later.
+                        // If you want a user to remove their account/data, add a separate
+                        // "Delete account" or "Clear data" action in settings.
 
                         // Navigate to onboarding (or login) screen
                         val intent = Intent(requireContext(), OnboardingActivity::class.java)

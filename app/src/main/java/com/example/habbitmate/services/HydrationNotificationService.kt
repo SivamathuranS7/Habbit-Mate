@@ -15,6 +15,7 @@ import com.example.habbitmate.data.PreferencesHelper
 class HydrationNotificationService : BroadcastReceiver() {
     
     companion object {
+        // Actions for starting/stopping/showing hydration reminders (BroadcastReceiver-based)
         const val CHANNEL_ID = "hydration_reminder_channel"
         const val NOTIFICATION_ID = 1001
         const val ACTION_START = "start_hydration_reminders"
@@ -53,7 +54,8 @@ class HydrationNotificationService : BroadcastReceiver() {
     }
     
     private fun scheduleRepeatingNotification(context: Context, intervalMinutes: Int) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    // Schedule next hydration reminder; use exact alarms when possible to fire during Doze and avoid duplicate alarms.
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, HydrationNotificationService::class.java).apply {
             action = ACTION_SHOW_NOTIFICATION
         }
@@ -84,6 +86,7 @@ class HydrationNotificationService : BroadcastReceiver() {
     }
     
     private fun cancelRepeatingNotification(context: Context) {
+        // Cancel scheduled hydration alarm using the same PendingIntent
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, HydrationNotificationService::class.java).apply {
             action = ACTION_SHOW_NOTIFICATION
@@ -98,6 +101,7 @@ class HydrationNotificationService : BroadcastReceiver() {
         alarmManager.cancel(pendingIntent)
     }
     
+    // Check preferences, post hydration notification, and reschedule the next reminder.
     private fun showNotification(context: Context) {
         val preferencesHelper = PreferencesHelper(context)
         
@@ -105,8 +109,9 @@ class HydrationNotificationService : BroadcastReceiver() {
             return
         }
         
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        
+    // Build and post the hydration notification (NotificationChannel set elsewhere)
+    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_water_drop)
             .setContentTitle(context.getString(R.string.hydration_notification_title))
@@ -115,7 +120,7 @@ class HydrationNotificationService : BroadcastReceiver() {
             .setAutoCancel(true)
             .setOngoing(false)
             .build()
-        
+
         notificationManager.notify(NOTIFICATION_ID, notification)
         
         // Schedule next notification

@@ -15,7 +15,7 @@ class ActivityAdapter(
     private val onEditActivity: (Activity) -> Unit,
     private val onDeleteActivity: (Activity) -> Unit
 ) : RecyclerView.Adapter<ActivityAdapter.ActivityViewHolder>() {
-    
+    // Adapter for user activities (walking, running, etc.) displayed in RecyclerView
     private var activities = listOf<Activity>()
     private val dateFormat = SimpleDateFormat("MMM dd, h:mm a", Locale.getDefault())
     
